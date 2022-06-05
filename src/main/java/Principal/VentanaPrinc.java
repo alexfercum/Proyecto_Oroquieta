@@ -14,6 +14,7 @@ import Facturacion.FacturacionForm;
 
 import Mascotas.MascotaFicha;
 import Mascotas.MascotasTabla;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -138,6 +139,15 @@ public class VentanaPrinc extends javax.swing.JFrame {
         t.setBounds(0,0,750,500);
         this.getContentPane().add(t);
     }
+    public void showFacturacionConf(DefaultTableModel dtm){
+        this.getContentPane().removeAll();
+        this.getContentPane().setVisible(false);
+        this.getContentPane().setVisible(true);
+        Confirmacion t= new Confirmacion(this,dtm);
+        t.setVisible(true);
+        t.setBounds(0,0,750,500);
+        this.getContentPane().add(t);
+    }
     public void showFacturacionConf(){
         this.getContentPane().removeAll();
         this.getContentPane().setVisible(false);
@@ -167,7 +177,6 @@ public class VentanaPrinc extends javax.swing.JFrame {
         jMenu6 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(600, 450));
 
         jMenu1.setText("Principal");
         jMenu1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -216,7 +225,7 @@ public class VentanaPrinc extends javax.swing.JFrame {
         });
         jMenuBar1.add(jMenu5);
 
-        jMenu6.setText("Atriculos");
+        jMenu6.setText("Articulos");
         jMenu6.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jMenu6MouseClicked(evt);

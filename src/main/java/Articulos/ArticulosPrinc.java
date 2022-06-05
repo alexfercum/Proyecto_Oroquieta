@@ -4,8 +4,15 @@
  */
 package Articulos;
 
+import Database.Database;
 import Principal.VentanaPrinc;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -17,12 +24,20 @@ public class ArticulosPrinc extends javax.swing.JPanel {
      * Creates new form ArticulosPrinc
      */
     VentanaPrinc padre;
+    private long codigoNuevo = 0;
+    private long codigoActual;
+    private List<QueryDocumentSnapshot> documents;
+
     public ArticulosPrinc() {
         initComponents();
     }
+
     public ArticulosPrinc(VentanaPrinc frame) {
         initComponents();
-        padre=frame;
+
+        crearTabla();
+        llenarCombos();
+        padre = frame;
     }
 
     /**
@@ -43,6 +58,19 @@ public class ArticulosPrinc extends javax.swing.JPanel {
         jLabel3 = new javax.swing.JLabel();
         jTextField3 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jTextField4 = new javax.swing.JTextField();
+        jTextField5 = new javax.swing.JTextField();
+        jTextField6 = new javax.swing.JTextField();
+        jComboBox2 = new javax.swing.JComboBox<>();
+        jButton2 = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
+        jTextField8 = new javax.swing.JTextField();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -59,10 +87,10 @@ public class ArticulosPrinc extends javax.swing.JPanel {
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 60, 300, 120));
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 30, 380, 120));
 
         jTextField1.setText("jTextField1");
-        add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 40, -1, -1));
+        add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 40, -1, -1));
 
         jLabel1.setText("Codigo");
         add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, -1, -1));
@@ -71,28 +99,322 @@ public class ArticulosPrinc extends javax.swing.JPanel {
         add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, -1, -1));
 
         jTextField2.setText("jTextField2");
-        add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 70, -1, -1));
+        add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 70, -1, -1));
 
         jLabel3.setText("Precio");
         add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, -1, -1));
 
         jTextField3.setText("jTextField3");
-        add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 100, -1, -1));
+        jTextField3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField3KeyTyped(evt);
+            }
+        });
+        add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 100, -1, -1));
 
         jButton1.setText("Aceptar");
-        add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, -1, -1));
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton1MouseClicked(evt);
+            }
+        });
+        add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, -1, -1));
+
+        jLabel4.setText("Tipo");
+        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, -1, -1));
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 130, -1, -1));
+
+        jLabel5.setText("Filtrar por nombre");
+        add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 170, -1, -1));
+
+        jLabel6.setText("Filtrar por Tipo");
+        add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 170, -1, 20));
+
+        jLabel7.setText("Filtrar por precio");
+        add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 200, -1, -1));
+
+        jLabel8.setText("Filtrar por Codigo");
+        add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 200, -1, 20));
+
+        jTextField4.setText("jTextField4");
+        jTextField4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField4ActionPerformed(evt);
+            }
+        });
+        add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 170, -1, -1));
+
+        jTextField5.setText("jTextField5");
+        jTextField5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField5ActionPerformed(evt);
+            }
+        });
+        add(jTextField5, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 200, -1, -1));
+
+        jTextField6.setText("jTextField6");
+        jTextField6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField6ActionPerformed(evt);
+            }
+        });
+        add(jTextField6, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 200, -1, -1));
+
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox2ActionPerformed(evt);
+            }
+        });
+        jComboBox2.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jComboBox2PropertyChange(evt);
+            }
+        });
+        add(jComboBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 170, -1, -1));
+
+        jButton2.setText("Reiniciar Tabla");
+        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton2MouseClicked(evt);
+            }
+        });
+        add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 240, -1, -1));
+
+        jLabel10.setText("Precio Compra");
+        add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, -1, -1));
+
+        jTextField8.setText("jTextField8");
+        jTextField8.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField8KeyTyped(evt);
+            }
+        });
+        add(jTextField8, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 160, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
+    public void llenarCombos() {
+        DefaultComboBoxModel dcm = new DefaultComboBoxModel();
+        DefaultComboBoxModel dcm2 = new DefaultComboBoxModel();
+        dcm.addElement("Servicio");
+        dcm.addElement("Tienda");
+        dcm.addElement("Alimentacion");
+        dcm.addElement("Farmacos");
+        dcm2.addElement("Servicio");
+        dcm2.addElement("Tienda");
+        dcm2.addElement("Alimentacion");
+        dcm2.addElement("Farmacos");
+        jComboBox1.setModel(dcm);
+        jComboBox2.setModel(dcm2);
+    }
+
+    public void crearTabla() {
+        DefaultTableModel dtm = new DefaultTableModel();
+
+        dtm.addColumn("Nombre");
+        dtm.addColumn("Tipo");
+        dtm.addColumn("Precio");
+        dtm.addColumn("Codigo");
+
+        documents = Database.accederDB("Inventario");
+        for (int i = 0; i < documents.size(); i++) {
+            Object[] fila = new Object[]{
+                documents.get(i).getData().get("Nombre"),
+                documents.get(i).getData().get("Tipo"),
+                documents.get(i).getData().get("Precio"),
+                documents.get(i).getData().get("Codigo"),};
+            dtm.addRow(fila);
+        }
+        jTable1.setModel(dtm);
+
+    }
+
+    public long conseguirId() {
+        documents = Database.accederDB("Inventario");
+        if (!documents.isEmpty()) {
+            codigoNuevo = documents.size();
+            return (codigoNuevo);
+        }
+        return (0);
+    }
+
+    public void filtrarNombre() {
+        String filtro = jTextField4.getText();
+        DefaultTableModel dtm = new DefaultTableModel();
+
+        dtm.addColumn("Nombre");
+        dtm.addColumn("Tipo");
+        dtm.addColumn("Precio");
+        dtm.addColumn("Codigo");
+
+        documents = Database.accederDB("Inventario");
+        for (int i = 0; i < documents.size(); i++) {
+            if (documents.get(i).getData().get("Nombre").equals(filtro)) {
+                Object[] fila = new Object[]{
+                    documents.get(i).getData().get("Nombre"),
+                    documents.get(i).getData().get("Tipo"),
+                    documents.get(i).getData().get("Precio"),
+                    documents.get(i).getData().get("Codigo"),};
+                dtm.addRow(fila);
+            }
+        }
+        jTable1.setModel(dtm);
+    }
+
+    public void filtrarPrecio() {
+        String filtro = jTextField5.getText();
+        DefaultTableModel dtm = new DefaultTableModel();
+
+        dtm.addColumn("Nombre");
+        dtm.addColumn("Tipo");
+        dtm.addColumn("Precio");
+        dtm.addColumn("Codigo");
+
+        documents = Database.accederDB("Inventario");
+        for (int i = 0; i < documents.size(); i++) {
+            if (documents.get(i).getData().get("Precio").equals(filtro)) {
+                Object[] fila = new Object[]{
+                    documents.get(i).getData().get("Nombre"),
+                    documents.get(i).getData().get("Tipo"),
+                    documents.get(i).getData().get("Precio"),
+                    documents.get(i).getData().get("Codigo"),};
+                dtm.addRow(fila);
+            }
+        }
+        jTable1.setModel(dtm);
+    }
+
+    public void filtrarTipo() {
+        String filtro = (String) jComboBox2.getSelectedItem();
+        DefaultTableModel dtm = new DefaultTableModel();
+
+        dtm.addColumn("Nombre");
+        dtm.addColumn("Tipo");
+        dtm.addColumn("Precio");
+        dtm.addColumn("Codigo");
+
+        documents = Database.accederDB("Inventario");
+        for (int i = 0; i < documents.size(); i++) {
+            if (documents.get(i).getData().get("Tipo").equals(filtro)) {
+                Object[] fila = new Object[]{
+                    documents.get(i).getData().get("Nombre"),
+                    documents.get(i).getData().get("Tipo"),
+                    documents.get(i).getData().get("Precio"),
+                    documents.get(i).getData().get("Codigo"),};
+                dtm.addRow(fila);
+            }
+        }
+        jTable1.setModel(dtm);
+    }
+
+    public void filtrarCodigo() {
+        String filtro = jTextField6.getText();
+        DefaultTableModel dtm = new DefaultTableModel();
+
+        dtm.addColumn("Nombre");
+        dtm.addColumn("Tipo");
+        dtm.addColumn("Precio");
+        dtm.addColumn("Codigo");
+
+        documents = Database.accederDB("Inventario");
+        for (int i = 0; i < documents.size(); i++) {
+            if (documents.get(i).getData().get("Codigo").equals(filtro)) {
+                Object[] fila = new Object[]{
+                    documents.get(i).getData().get("Nombre"),
+                    documents.get(i).getData().get("Tipo"),
+                    documents.get(i).getData().get("Precio"),
+                    documents.get(i).getData().get("Codigo"),};
+                dtm.addRow(fila);
+            }
+        }
+        jTable1.setModel(dtm);
+    }
+    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        String Codigo = jTextField1.getText();
+        String Nombre = jTextField2.getText();
+        String Precio = jTextField3.getText();
+        String Tipo = (String) jComboBox1.getSelectedItem();
+        String PrecioCompra = jTextField8.getText();
+        String Id = String.valueOf(conseguirId());
+        Map<String, Object> data = new HashMap<>();
+        data.put("Codigo", Codigo);
+        data.put("Nombre", Nombre);
+        data.put("Precio", Precio);
+        data.put("Tipo", Tipo);
+        data.put("Precio Compra", PrecioCompra);
+        Database.insertarDatos("Inventario", Id, data);
+
+        crearTabla();
+    }//GEN-LAST:event_jButton1MouseClicked
+
+    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+        crearTabla();
+    }//GEN-LAST:event_jButton2MouseClicked
+
+    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
+        filtrarNombre();
+    }//GEN-LAST:event_jTextField4ActionPerformed
+
+    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
+        filtrarPrecio();
+    }//GEN-LAST:event_jTextField5ActionPerformed
+
+    private void jTextField6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField6ActionPerformed
+        filtrarCodigo();
+    }//GEN-LAST:event_jTextField6ActionPerformed
+
+    private void jComboBox2PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jComboBox2PropertyChange
+
+    }//GEN-LAST:event_jComboBox2PropertyChange
+
+    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
+        filtrarTipo();
+    }//GEN-LAST:event_jComboBox2ActionPerformed
+
+    private void jTextField3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField3KeyTyped
+        int key = evt.getKeyChar();
+
+        boolean numeros = key >= 48 && key <= 57;
+
+        if (!numeros) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_jTextField3KeyTyped
+
+    private void jTextField8KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField8KeyTyped
+        int key = evt.getKeyChar();
+
+        boolean numeros = key >= 48 && key <= 57;
+
+        if (!numeros) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_jTextField8KeyTyped
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
+    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTextField jTextField5;
+    private javax.swing.JTextField jTextField6;
+    private javax.swing.JTextField jTextField8;
     // End of variables declaration//GEN-END:variables
 }

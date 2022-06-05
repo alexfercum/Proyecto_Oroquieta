@@ -6,6 +6,7 @@ package Facturacion;
 
 import Principal.VentanaPrinc;
 import javax.swing.JFrame;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -22,6 +23,11 @@ public class Confirmacion extends javax.swing.JPanel {
     }
     public Confirmacion(VentanaPrinc frame) {
         initComponents();
+        padre=frame;
+    }
+    public Confirmacion(VentanaPrinc frame,DefaultTableModel dtm) {
+        initComponents();
+        jTable1.setModel(dtm);
         padre=frame;
     }
 
