@@ -6,8 +6,17 @@ package Clientes;
 
 import Database.Database;
 import Principal.VentanaPrinc;
+import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.QuerySnapshot;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 
@@ -228,7 +237,7 @@ public class ClientesTabla extends javax.swing.JPanel {
         jLabel4.setText("Filtrar por Telefono");
         add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 170, -1, -1));
 
-        jTextField1.setText("jTextField1");
+        jTextField1.setText("------");
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField1ActionPerformed(evt);
@@ -236,7 +245,7 @@ public class ClientesTabla extends javax.swing.JPanel {
         });
         add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 150, -1, -1));
 
-        jTextField2.setText("jTextField2");
+        jTextField2.setText("------");
         jTextField2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField2ActionPerformed(evt);
@@ -244,7 +253,7 @@ public class ClientesTabla extends javax.swing.JPanel {
         });
         add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 170, -1, -1));
 
-        jTextField3.setText("jTextField3");
+        jTextField3.setText("------");
         jTextField3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField3ActionPerformed(evt);
@@ -252,7 +261,7 @@ public class ClientesTabla extends javax.swing.JPanel {
         });
         add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 150, -1, -1));
 
-        jTextField4.setText("jTextField4");
+        jTextField4.setText("------");
         jTextField4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField4ActionPerformed(evt);
@@ -286,16 +295,38 @@ public class ClientesTabla extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
-                
-        int i=jTable1.getSelectedRow();
-        Object[] fila = new Object[]{
-                documents.get(i).getData().get("Nombre"),
-                documents.get(i).getData().get("Apellidos"),
-                documents.get(i).getData().get("DNI"),
-                documents.get(i).getData().get("E-mail"),
-                documents.get(i).getData().get("Codigo"),
-                documents.get(i).getData().get("Telefono"),};
-        padre.showClientesFormNoEditable(fila);
+
+        try {
+            DefaultTableModel tm = (DefaultTableModel) jTable1.getModel();
+            String dni = tm.getValueAt(jTable1.getSelectedRow(), 2).toString();
+            Firestore db = Database.getDatabase();
+            DocumentReference docRefClient = db.collection("Clientes").document(dni);
+            DocumentSnapshot documento = docRefClient.get().get();
+            ArrayList<String> codMasc= new ArrayList<String>();
+            codMasc=(ArrayList<String>) documento.getData().get("Mascotas");
+            
+            ArrayList<String> nomMasc= new ArrayList<String>();
+            for(String codigo:codMasc){
+                DocumentReference docRefPet = db.collection("Mascotas").document(codigo);
+                DocumentSnapshot pet = docRefPet.get().get();
+                nomMasc.add((String) pet.getData().get("Nombre"));
+            }
+            Object[] fila = new Object[]{
+                documento.getData().get("Nombre"),
+                documento.getData().get("Apellidos"),
+                documento.getData().get("DNI"),
+                documento.getData().get("E-mail"),
+                documento.getData().get("Codigo"),
+                documento.getData().get("Telefono"),
+                nomMasc,
+                codMasc}    ;
+            padre.showClientesFormNoEditable(fila);
+
+        } catch (InterruptedException ex) {
+            System.out.println("Error 1");
+        } catch (ExecutionException ex) {
+            System.out.println("Error 1");
+        }
     }//GEN-LAST:event_jButton2MouseClicked
 
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked

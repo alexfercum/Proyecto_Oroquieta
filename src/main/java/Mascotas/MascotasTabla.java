@@ -6,8 +6,12 @@ package Mascotas;
 
 import Database.Database;
 import Principal.VentanaPrinc;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 
@@ -56,7 +60,7 @@ public class MascotasTabla extends javax.swing.JPanel {
         jTable1.setModel(dtm);
     }
     public void filtrarNombre() {
-        String filtro = jTextField4.getText();
+        String filtro = jTextField1.getText();
         DefaultTableModel dtm = new DefaultTableModel();
 
         dtm.addColumn("Nombre");
@@ -68,7 +72,7 @@ public class MascotasTabla extends javax.swing.JPanel {
 
         documents = Database.accederDB("Mascotas");
         for (int i = 0; i < documents.size(); i++) {
-            if (documents.get(i).getData().get("Telefono").equals(filtro)) {
+            if (documents.get(i).getData().get("Nombre").equals(filtro)) {
                 Object[] fila = new Object[]{
                     documents.get(i).getData().get("Nombre"),
                     documents.get(i).getData().get("Edad"),
@@ -106,8 +110,8 @@ public class MascotasTabla extends javax.swing.JPanel {
         }
         jTable1.setModel(dtm);
     }
-    public void filtrarRaza() {
-        String filtro = jTextField4.getText();
+    public void filtrarEspecie() {
+        String filtro = jTextField2.getText();
         DefaultTableModel dtm = new DefaultTableModel();
 
         dtm.addColumn("Nombre");
@@ -119,7 +123,7 @@ public class MascotasTabla extends javax.swing.JPanel {
 
         documents = Database.accederDB("Mascotas");
         for (int i = 0; i < documents.size(); i++) {
-            if (documents.get(i).getData().get("Telefono").equals(filtro)) {
+            if (documents.get(i).getData().get("Especie").equals(filtro)) {
                 Object[] fila = new Object[]{
                     documents.get(i).getData().get("Nombre"),
                     documents.get(i).getData().get("Edad"),
@@ -132,7 +136,7 @@ public class MascotasTabla extends javax.swing.JPanel {
         }
         jTable1.setModel(dtm);
     }
-    public void filtrarChip() {
+    public void filtrarCliente() {
         String filtro = jTextField4.getText();
         DefaultTableModel dtm = new DefaultTableModel();
 
@@ -200,7 +204,7 @@ public class MascotasTabla extends javax.swing.JPanel {
 
         add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, 450, 178));
 
-        jTextField1.setText("-----");
+        jTextField1.setText("------");
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField1ActionPerformed(evt);
@@ -208,7 +212,7 @@ public class MascotasTabla extends javax.swing.JPanel {
         });
         add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 210, 90, -1));
 
-        jTextField2.setText("-----");
+        jTextField2.setText("------");
         jTextField2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField2ActionPerformed(evt);
@@ -216,7 +220,7 @@ public class MascotasTabla extends javax.swing.JPanel {
         });
         add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 240, 90, 20));
 
-        jTextField3.setText("----");
+        jTextField3.setText("------");
         jTextField3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField3ActionPerformed(evt);
@@ -224,7 +228,12 @@ public class MascotasTabla extends javax.swing.JPanel {
         });
         add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 210, 80, -1));
 
-        jTextField4.setText("----");
+        jTextField4.setText("------");
+        jTextField4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField4ActionPerformed(evt);
+            }
+        });
         add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 240, 90, -1));
 
         jButton1.setText("Reiniciar");
@@ -241,7 +250,7 @@ public class MascotasTabla extends javax.swing.JPanel {
                 jButton2MouseClicked(evt);
             }
         });
-        add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 300, -1, -1));
+        add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 310, -1, -1));
 
         jButton3.setText("Nueva Mascota");
         jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -252,7 +261,7 @@ public class MascotasTabla extends javax.swing.JPanel {
                 jButton3MouseEntered(evt);
             }
         });
-        add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 300, -1, -1));
+        add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 310, -1, -1));
 
         jLabel1.setText("Filtrar por nombre");
         add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, -1, -1));
@@ -268,15 +277,40 @@ public class MascotasTabla extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
+        filtrarNombre();
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
-        // TODO add your handling code here:
+        filtrarEspecie();
     }//GEN-LAST:event_jTextField2ActionPerformed
 
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
-        padre.showMascotasFicha();
+        try {
+            DefaultTableModel tm = (DefaultTableModel) jTable1.getModel();
+            String codigo = tm.getValueAt(jTable1.getSelectedRow(), 4).toString();
+            Firestore db = Database.getDatabase();
+            DocumentReference docRef = db.collection("Mascotas").document(codigo);
+
+            DocumentSnapshot documento = docRef.get().get();
+
+            Object[] fila = new Object[]{
+                documento.getData().get("Nombre"),
+                documento.getData().get("Edad"),
+                documento.getData().get("Especie"),
+                documento.getData().get("Chip"),
+                documento.getData().get("Codigo"),
+                documento.getData().get("Raza"),                
+                documento.getData().get("Caracter"),
+                documento.getData().get("Sexo"),
+                documento.getData().get("Esterilizacion"),
+                documento.getData().get("Cliente"),};
+            padre.showMascotasFichaNoEditable(fila);
+
+        } catch (InterruptedException ex) {
+            System.out.println("Error 1");
+        } catch (ExecutionException ex) {
+            System.out.println("Error 1");
+        }
     }//GEN-LAST:event_jButton2MouseClicked
 
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
@@ -294,6 +328,10 @@ public class MascotasTabla extends javax.swing.JPanel {
     private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
         filtrarCodigo();
     }//GEN-LAST:event_jTextField3ActionPerformed
+
+    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
+        filtrarCliente();
+    }//GEN-LAST:event_jTextField4ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

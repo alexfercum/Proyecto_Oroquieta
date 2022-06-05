@@ -13,8 +13,17 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JFrame;
 import Database.Database;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 /**
  *
  * @author Alex
@@ -25,18 +34,23 @@ public class ClientesForm extends javax.swing.JPanel {
      * Creates new form ClientesForm
      */
     private List<QueryDocumentSnapshot> documents;
-    private long codigo=0;
+    private long codigoNuevo=0;
+    private long codigoActual;
+    private ArrayList<String> codMasc=new ArrayList<String>();
     VentanaPrinc padre;
     
     
     public ClientesForm(VentanaPrinc frame,boolean editable) {
         initComponents();
-        jTextField5.setText(String.valueOf(conseguirCodigo()));
+        
+        jTextField5.setText(String.valueOf(conseguirCodigo()+1));
+        reiniciarCampos();
         if(!editable){
             initModify(editable);
         }
         padre = frame;
     }
+    
     public ClientesForm(VentanaPrinc frame,boolean editable,Object[] fila) {
         initComponents();
         jTextField5.setText(String.valueOf(conseguirCodigo()));
@@ -48,8 +62,22 @@ public class ClientesForm extends javax.swing.JPanel {
             jTextField4.setText((String) fila[2]);
             jTextField5.setText( String.valueOf(fila[4]));
             jTextField6.setText((String) fila[3]);
+            DefaultComboBoxModel dcm= new DefaultComboBoxModel();
+            ArrayList<String> mascotas= (ArrayList<String>) fila[6];
+            for(int i=0;i<mascotas.size();i++){                
+                dcm.addElement(mascotas.get(i));              
+        }
+            codMasc=(ArrayList<String>)fila[7];
+            jComboBox1.setModel(dcm);
         }
         padre = frame;
+    }
+    public void reiniciarCampos(){
+        jTextField1.setText("----");
+        jTextField2.setText("----");
+        jTextField3.setText("----");
+        jTextField4.setText("----");
+        jTextField6.setText("----");
     }
     public void habilitarEdicion(Boolean editable){
         jTextField1.setEditable(editable);
@@ -65,8 +93,8 @@ public class ClientesForm extends javax.swing.JPanel {
     public long conseguirCodigo() {
         documents = Database.accederDB("Clientes");
         if (!documents.isEmpty()) {
-            codigo=documents.size();
-            return (codigo);
+            codigoNuevo=documents.size();
+            return (codigoNuevo);
         }
         return (0);
     }
@@ -82,6 +110,8 @@ public class ClientesForm extends javax.swing.JPanel {
         String Telefono = jTextField3.getText();
         String E_mail = jTextField6.getText();
         String DNI = jTextField4.getText();
+        String[] mascotas = new String[]{"Aun no se han asignado mascotas"};
+        ArrayList<String> mascota= new ArrayList();
         Map<String, Object> data = new HashMap<>();
         data.put("Nombre", nombre);
         data.put("Apellidos", Apellido);
@@ -89,9 +119,13 @@ public class ClientesForm extends javax.swing.JPanel {
         if (add) {
             long Codigo = conseguirCodigo() + 1;
             data.put("Codigo", Codigo);
+        }else{
+            long Codigo = codigoActual;
+            data.put("Codigo", Codigo);
         }
         data.put("E-mail", E_mail);
         data.put("DNI", DNI);
+        data.put("Mascotas",Arrays.asList(mascotas));
         Database.insertarDatos("Clientes", DNI, data);
         jTextField5.setText(String.valueOf(conseguirCodigo()));
     }
@@ -165,6 +199,11 @@ public class ClientesForm extends javax.swing.JPanel {
                 jTextField5ActionPerformed(evt);
             }
         });
+        jTextField5.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jTextField5PropertyChange(evt);
+            }
+        });
         add(jTextField5, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 60, -1, -1));
 
         jTextField6.setText("jt@gmail");
@@ -235,7 +274,30 @@ public class ClientesForm extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-        padre.showMascotasFicha();
+        try {
+            int num=jComboBox1.getSelectedIndex();
+            Firestore db = Database.getDatabase();
+            DocumentReference docRef = db.collection("Mascotas").document(codMasc.get(num));
+
+            DocumentSnapshot documento = docRef.get().get();
+
+            Object[] fila = new Object[]{
+                documento.getData().get("Nombre"),
+                documento.getData().get("Edad"),
+                documento.getData().get("Especie"),
+                documento.getData().get("Chip"),
+                documento.getData().get("Codigo"),
+                documento.getData().get("Raza"),                
+                documento.getData().get("Caracter"),
+                documento.getData().get("Sexo"),
+                documento.getData().get("Esterilizacion"),
+                documento.getData().get("Cliente"),};
+            padre.showMascotasFichaNoEditable(fila);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(ClientesForm.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ExecutionException ex) {
+            Logger.getLogger(ClientesForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton1MouseClicked
 
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
@@ -261,6 +323,8 @@ public class ClientesForm extends javax.swing.JPanel {
                 anadirCliente(false);
             } else {
                 anadirCliente(true);
+                habilitarEdicion(false);
+                jButton4.setText("Modificar");
             }
         }
 
@@ -273,6 +337,10 @@ public class ClientesForm extends javax.swing.JPanel {
     private void jButton6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton6MouseClicked
         padre.showClientesTabla();
     }//GEN-LAST:event_jButton6MouseClicked
+
+    private void jTextField5PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jTextField5PropertyChange
+        codigoActual=Long.parseLong(jTextField5.getText());
+    }//GEN-LAST:event_jTextField5PropertyChange
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

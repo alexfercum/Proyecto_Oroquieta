@@ -29,7 +29,7 @@ public class VentanaPrinc extends javax.swing.JFrame {
         init();
     }
     public void init(){
-        System.out.println("Pepe");
+        
         try{
             Database.conexion();
         }catch(Exception e){
@@ -69,7 +69,16 @@ public class VentanaPrinc extends javax.swing.JFrame {
         this.getContentPane().removeAll();
         this.getContentPane().setVisible(false);
         this.getContentPane().setVisible(true);
-        MascotaFicha t= new MascotaFicha(this);
+        MascotaFicha t= new MascotaFicha(this,true);
+        t.setVisible(true);
+        t.setBounds(0,0,750,500);
+        this.getContentPane().add(t);
+    }
+    public void showMascotasFichaNoEditable(Object[] fila){
+        this.getContentPane().removeAll();
+        this.getContentPane().setVisible(false);
+        this.getContentPane().setVisible(true);
+        MascotaFicha t= new MascotaFicha(this,false,fila);
         t.setVisible(true);
         t.setBounds(0,0,750,500);
         this.getContentPane().add(t);

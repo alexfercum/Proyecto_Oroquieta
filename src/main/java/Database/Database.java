@@ -75,5 +75,8 @@ public class Database {
         }
         return documents; 
     }
+    public static Firestore getDatabase(){
+        return db;        
+    }
 
 }
