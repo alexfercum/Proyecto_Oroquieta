@@ -4,8 +4,16 @@
  */
 package Facturacion;
 
+import Database.Database;
 import Principal.VentanaPrinc;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -18,6 +26,7 @@ public class Confirmacion extends javax.swing.JPanel {
      * Creates new form Confirmacion
      */
     VentanaPrinc padre;
+    private List<QueryDocumentSnapshot> documents;
     public Confirmacion() {
         initComponents();
     }
@@ -25,12 +34,60 @@ public class Confirmacion extends javax.swing.JPanel {
         initComponents();
         padre=frame;
     }
+    public Confirmacion(VentanaPrinc frame,DefaultTableModel dtm,String nombre) {
+        initComponents();
+        padre=frame;
+        jTable1.setModel(dtm);
+        calcularPrecio();
+        jTextField2.setText(nombre);
+    }
+    public long conseguirCodigo() {
+        documents = Database.accederDB("Facturacion");
+        if (!documents.isEmpty()) {
+            int codigoNuevo=documents.size();
+            return (codigoNuevo);
+        }
+        return (0);
+    }
     public Confirmacion(VentanaPrinc frame,DefaultTableModel dtm) {
         initComponents();
         jTable1.setModel(dtm);
+        calcularPrecio();
         padre=frame;
     }
-
+    public void calcularPrecio(){
+        DefaultTableModel dtm = (DefaultTableModel) jTable1.getModel();
+        long precioTotal=0;
+        for(int i=0;i<jTable1.getRowCount();i++){                      
+            Long precio = Long.parseLong((String) dtm.getValueAt(i, 1));                    
+            Long cantidad = Long.parseLong((String) dtm.getValueAt(i, 2));
+            precioTotal +=(precio*cantidad);
+        }
+        jTextField1.setText(String.valueOf(precioTotal));
+    }
+    public void anadirFactura() {       
+        DefaultTableModel dtm= new DefaultTableModel();
+        dtm= (DefaultTableModel) jTable1.getModel();
+        Map<String, Object> data = new HashMap<>();
+        ArrayList<String> nombre=new ArrayList<String>();
+        ArrayList<Long> precio=new ArrayList<Long>();
+        ArrayList<Long> cantidad=new ArrayList<Long>();
+        String observacion=jTextArea1.getText();
+        String cliente=jTextField2.getText();
+        for(int i=0;i<dtm.getRowCount();i++){
+            nombre.add((String) dtm.getValueAt(i, 0));           
+            precio.add(Long.parseLong((String) dtm.getValueAt(i, 1)));            
+            cantidad.add(Long.parseLong((String) dtm.getValueAt(i, 2)));                              
+        }              
+        
+        data.put("Nombre",nombre);
+        data.put("Precio", precio);
+        data.put("Cantidad",cantidad);        
+        data.put("Observacion", observacion);
+        data.put("Cliente", cliente);
+        Database.insertarDatos("Facturacion", String.valueOf(conseguirCodigo()+1), data);
+        
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -39,6 +96,7 @@ public class Confirmacion extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -50,9 +108,15 @@ public class Confirmacion extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
+        jLabel3 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
 
-        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        setBackground(new java.awt.Color(204, 255, 204));
+        setForeground(new java.awt.Color(0, 153, 0));
+        setLayout(new java.awt.GridBagLayout());
 
+        jTable1.setBackground(new java.awt.Color(204, 255, 204));
+        jTable1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -64,52 +128,182 @@ public class Confirmacion extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTable1.setRowHeight(40);
         jScrollPane1.setViewportView(jTable1);
 
-        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 375, 101));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 28;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 1104;
+        gridBagConstraints.ipady = 81;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(20, 10, 0, 110);
+        add(jScrollPane1, gridBagConstraints);
 
-        jTextField1.setText("jTextField1");
-        add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 140, -1, -1));
+        jTextField1.setEditable(false);
+        jTextField1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jTextField1.setText("0");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipadx = 116;
+        gridBagConstraints.ipady = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(49, 12, 0, 0);
+        add(jTextField1, gridBagConstraints);
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 153, 0));
         jLabel1.setText("Precio Total");
-        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(39, 10, 0, 0);
+        add(jLabel1, gridBagConstraints);
 
+        jButton1.setBackground(new java.awt.Color(116, 116, 235));
+        jButton1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(0, 0, 0));
         jButton1.setText("Eliminar seleccion");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
-        add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 140, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 27;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipady = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(49, 90, 0, 110);
+        add(jButton1, gridBagConstraints);
 
+        jButton2.setBackground(new java.awt.Color(116, 116, 235));
+        jButton2.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jButton2.setForeground(new java.awt.Color(0, 0, 0));
         jButton2.setText("Aceptar");
-        add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, -1, -1));
+        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton2MouseClicked(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.ipadx = 59;
+        gridBagConstraints.ipady = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(40, 20, 176, 0);
+        add(jButton2, gridBagConstraints);
 
+        jButton3.setBackground(new java.awt.Color(116, 116, 235));
+        jButton3.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jButton3.setForeground(new java.awt.Color(0, 0, 0));
         jButton3.setText("Cancelar/volver");
         jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jButton3MouseClicked(evt);
             }
         });
-        add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 260, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.ipadx = 15;
+        gridBagConstraints.ipady = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(40, 9, 176, 0);
+        add(jButton3, gridBagConstraints);
 
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 153, 0));
         jLabel2.setText("Observaciones");
-        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(20, 10, 0, 0);
+        add(jLabel2, gridBagConstraints);
 
         jTextArea1.setColumns(20);
+        jTextArea1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jTextArea1.setRows(5);
         jScrollPane2.setViewportView(jTextArea1);
 
-        add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 180, 130, 70));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 11;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 324;
+        gridBagConstraints.ipady = 94;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(40, 19, 0, 0);
+        add(jScrollPane2, gridBagConstraints);
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(0, 153, 0));
+        jLabel3.setText("Cliente");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(39, 50, 0, 0);
+        add(jLabel3, gridBagConstraints);
+
+        jTextField2.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jTextField2.setText("-----");
+        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField2ActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 15;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 12;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipadx = 176;
+        gridBagConstraints.ipady = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(49, 30, 0, 0);
+        add(jTextField2, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        try{
+        DefaultTableModel dtm= (DefaultTableModel) jTable1.getModel();
+        dtm.removeRow(jTable1.getSelectedRow());
+        }catch (NullPointerException | ArrayIndexOutOfBoundsException e){
+            JOptionPane.showMessageDialog(padre,"Seleccione una fila que eliminar","",JOptionPane.WARNING_MESSAGE );
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
         padre.showFacturacionForm();
     }//GEN-LAST:event_jButton3MouseClicked
+
+    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+        anadirFactura();
+    }//GEN-LAST:event_jButton2MouseClicked
+
+    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField2ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -118,10 +312,12 @@ public class Confirmacion extends javax.swing.JPanel {
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }

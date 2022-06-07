@@ -48,6 +48,7 @@ public class ArticulosPrinc extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -72,8 +73,12 @@ public class ArticulosPrinc extends javax.swing.JPanel {
         jLabel10 = new javax.swing.JLabel();
         jTextField8 = new javax.swing.JTextField();
 
-        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        setBackground(new java.awt.Color(204, 255, 204));
+        setRequestFocusEnabled(false);
+        setLayout(new java.awt.GridBagLayout());
 
+        jTable1.setBackground(new java.awt.Color(204, 255, 204));
+        jTable1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -85,83 +90,240 @@ public class ArticulosPrinc extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTable1.setToolTipText("");
+        jTable1.setRowHeight(40);
         jScrollPane1.setViewportView(jTable1);
 
-        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 30, 380, 120));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 10;
+        gridBagConstraints.gridheight = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 1014;
+        gridBagConstraints.ipady = 146;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(40, 70, 0, 122);
+        add(jScrollPane1, gridBagConstraints);
 
-        jTextField1.setText("jTextField1");
-        add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 40, -1, -1));
+        jTextField1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jTextField1.setText("-----");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipadx = 106;
+        gridBagConstraints.ipady = 18;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(60, 25, 0, 0);
+        add(jTextField1, gridBagConstraints);
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 153, 0));
         jLabel1.setText("Codigo");
-        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(50, 40, 0, 0);
+        add(jLabel1, gridBagConstraints);
 
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 153, 0));
         jLabel2.setText("Nombre");
-        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 40, 0, 0);
+        add(jLabel2, gridBagConstraints);
 
-        jTextField2.setText("jTextField2");
-        add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 70, -1, -1));
+        jTextField2.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jTextField2.setText("-----");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipadx = 106;
+        gridBagConstraints.ipady = 18;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(20, 25, 0, 0);
+        add(jTextField2, gridBagConstraints);
 
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(0, 153, 0));
         jLabel3.setText("Precio");
-        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(20, 40, 0, 0);
+        add(jLabel3, gridBagConstraints);
 
-        jTextField3.setText("jTextField3");
+        jTextField3.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jTextField3.setText("0");
         jTextField3.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jTextField3KeyTyped(evt);
             }
         });
-        add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 100, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridheight = 7;
+        gridBagConstraints.ipadx = 106;
+        gridBagConstraints.ipady = 18;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(30, 25, 0, 0);
+        add(jTextField3, gridBagConstraints);
 
+        jButton1.setBackground(new java.awt.Color(116, 116, 235));
+        jButton1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jButton1.setText("Aceptar");
         jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jButton1MouseClicked(evt);
             }
         });
-        add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 18;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.ipadx = 48;
+        gridBagConstraints.ipady = 18;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 30, 0, 0);
+        add(jButton1, gridBagConstraints);
 
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(0, 153, 0));
         jLabel4.setText("Tipo");
-        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 40, 0, 0);
+        add(jLabel4, gridBagConstraints);
 
+        jComboBox1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 130, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipadx = 98;
+        gridBagConstraints.ipady = 18;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(20, 25, 0, 0);
+        add(jComboBox1, gridBagConstraints);
 
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(0, 153, 0));
         jLabel5.setText("Filtrar por nombre");
-        add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 170, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 70, 0, 0);
+        add(jLabel5, gridBagConstraints);
 
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(0, 153, 0));
         jLabel6.setText("Filtrar por Tipo");
-        add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 170, -1, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 13;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipady = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 80, 0, 0);
+        add(jLabel6, gridBagConstraints);
 
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(0, 153, 0));
         jLabel7.setText("Filtrar por precio");
-        add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 200, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(20, 70, 0, 0);
+        add(jLabel7, gridBagConstraints);
 
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(0, 153, 0));
         jLabel8.setText("Filtrar por Codigo");
-        add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 200, -1, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 13;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 4;
+        gridBagConstraints.ipady = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(20, 50, 0, 0);
+        add(jLabel8, gridBagConstraints);
 
-        jTextField4.setText("jTextField4");
+        jTextField4.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jTextField4.setText("------");
         jTextField4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField4ActionPerformed(evt);
             }
         });
-        add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 170, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.ipadx = 96;
+        gridBagConstraints.ipady = 18;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(30, 28, 0, 0);
+        add(jTextField4, gridBagConstraints);
 
-        jTextField5.setText("jTextField5");
+        jTextField5.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jTextField5.setText("0");
         jTextField5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField5ActionPerformed(evt);
             }
         });
-        add(jTextField5, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 200, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.gridheight = 4;
+        gridBagConstraints.ipadx = 96;
+        gridBagConstraints.ipady = 18;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(30, 28, 0, 0);
+        add(jTextField5, gridBagConstraints);
 
-        jTextField6.setText("jTextField6");
+        jTextField6.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jTextField6.setText("-----");
         jTextField6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField6ActionPerformed(evt);
             }
         });
-        add(jTextField6, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 200, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 15;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridheight = 4;
+        gridBagConstraints.ipadx = 96;
+        gridBagConstraints.ipady = 18;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(30, 18, 0, 0);
+        add(jTextField6, gridBagConstraints);
 
+        jComboBox2.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jComboBox2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -173,26 +335,62 @@ public class ArticulosPrinc extends javax.swing.JPanel {
                 jComboBox2PropertyChange(evt);
             }
         });
-        add(jComboBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 170, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 15;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.ipadx = 88;
+        gridBagConstraints.ipady = 18;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(30, 18, 0, 0);
+        add(jComboBox2, gridBagConstraints);
 
+        jButton2.setBackground(new java.awt.Color(116, 116, 235));
+        jButton2.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jButton2.setText("Reiniciar Tabla");
         jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jButton2MouseClicked(evt);
             }
         });
-        add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 240, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 18;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipadx = 54;
+        gridBagConstraints.ipady = 18;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(30, 330, 418, 0);
+        add(jButton2, gridBagConstraints);
 
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(0, 153, 0));
         jLabel10.setText("Precio Compra");
-        add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 40, 0, 0);
+        add(jLabel10, gridBagConstraints);
 
-        jTextField8.setText("jTextField8");
+        jTextField8.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jTextField8.setText("0");
         jTextField8.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jTextField8KeyTyped(evt);
             }
         });
-        add(jTextField8, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 160, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipadx = 106;
+        gridBagConstraints.ipady = 18;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(20, 25, 0, 0);
+        add(jTextField8, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
     public void llenarCombos() {
         DefaultComboBoxModel dcm = new DefaultComboBoxModel();

@@ -5,6 +5,7 @@
 package Principal;
 
 import Articulos.ArticulosPrinc;
+import Citas.CitasCalendario;
 import Citas.CitasForm;
 import Clientes.ClientesForm;
 import Clientes.ClientesTabla;
@@ -14,6 +15,8 @@ import Facturacion.FacturacionForm;
 
 import Mascotas.MascotaFicha;
 import Mascotas.MascotasTabla;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -25,19 +28,50 @@ public class VentanaPrinc extends javax.swing.JFrame {
     /**
      * Creates new form VentanaPrinc
      */
+    private List<QueryDocumentSnapshot> documents;
+    public static boolean articulos;
+    public static boolean citas;
+    public static boolean facturacion;
     public VentanaPrinc() {
         initComponents();
         init();
-    }
-    public void init(){
+        documents = Database.accederDB("Modulos");        
+        articulos=(boolean) documents.get(0).getData().get("Articulos");
+        citas=(boolean) documents.get(0).getData().get("Citas");
+        facturacion=(boolean) documents.get(0).getData().get("Facturacion");   
+       deshabilitarFunciones();
+        if(!articulos&!citas&!facturacion){
+            showSeleccionModulos();
+        }else{
+            showVentanaInicio();
+        }
         
+        
+    }
+    public void init(){        
         try{
             Database.conexion();
         }catch(Exception e){
            
-        }
-        showSeleccionModulos();
+        }       
+    }
+    public void deshabilitarFunciones(){
+         
+        documents = Database.accederDB("Modulos");        
+        articulos=(boolean) documents.get(0).getData().get("Articulos");
+        citas=(boolean) documents.get(0).getData().get("Citas");
+        facturacion=(boolean) documents.get(0).getData().get("Facturacion");           
+        jMenu4.setVisible(citas);
+        jMenu5.setVisible(facturacion);
+        jMenu6.setVisible(articulos);
         
+        
+    }
+    
+    public void ocultaMenus(boolean cita,boolean facturacion, boolean articulos){
+        jMenu4.setVisible(cita);
+        jMenu5.setVisible(facturacion);
+        jMenu6.setVisible(articulos);
     }
     public void showClientesTabla(){
         this.getContentPane().removeAll();
@@ -45,7 +79,7 @@ public class VentanaPrinc extends javax.swing.JFrame {
         this.getContentPane().setVisible(true);
         ClientesTabla t= new ClientesTabla(this);
         t.setVisible(true);
-        t.setBounds(0,0,750,500);
+        t.setBounds(0,0,1920,1080);
         this.getContentPane().add(t);
     }
     public void showClientesFormEditable(){
@@ -54,7 +88,7 @@ public class VentanaPrinc extends javax.swing.JFrame {
         this.getContentPane().setVisible(true);
         ClientesForm t= new ClientesForm(this,true);
         t.setVisible(true);
-        t.setBounds(0,0,750,500);
+        t.setBounds(0,0,1920,1080);
         this.getContentPane().add(t);
     }
     public void showClientesFormNoEditable(Object[] fila){
@@ -63,7 +97,7 @@ public class VentanaPrinc extends javax.swing.JFrame {
         this.getContentPane().setVisible(true);
         ClientesForm t= new ClientesForm(this,false,fila);
         t.setVisible(true);
-        t.setBounds(0,0,750,500);
+        t.setBounds(0,0,1920,1080);
         this.getContentPane().add(t);
     }
     public void showMascotasFicha(){
@@ -72,7 +106,7 @@ public class VentanaPrinc extends javax.swing.JFrame {
         this.getContentPane().setVisible(true);
         MascotaFicha t= new MascotaFicha(this,true);
         t.setVisible(true);
-        t.setBounds(0,0,750,500);
+        t.setBounds(0,0,1920,1080);
         this.getContentPane().add(t);
     }
     public void showMascotasFichaNoEditable(Object[] fila){
@@ -81,7 +115,7 @@ public class VentanaPrinc extends javax.swing.JFrame {
         this.getContentPane().setVisible(true);
         MascotaFicha t= new MascotaFicha(this,false,fila);
         t.setVisible(true);
-        t.setBounds(0,0,750,500);
+        t.setBounds(0,0,1920,1080);
         this.getContentPane().add(t);
     }
   
@@ -91,7 +125,7 @@ public class VentanaPrinc extends javax.swing.JFrame {
         this.getContentPane().setVisible(true);
         MascotasTabla t= new MascotasTabla(this);
         t.setVisible(true);
-        t.setBounds(0,0,750,500);
+        t.setBounds(0,0,1920,1080);
         this.getContentPane().add(t);
     }
     public void showVentanaInicio(){
@@ -100,7 +134,7 @@ public class VentanaPrinc extends javax.swing.JFrame {
         this.getContentPane().setVisible(true);
         VentanaInicio t= new VentanaInicio(this);
         t.setVisible(true);
-        t.setBounds(0,0,750,500);
+        t.setBounds(0,0,1920,1080);
         this.getContentPane().add(t);
     }
     public void showSeleccionModulos(){
@@ -109,7 +143,7 @@ public class VentanaPrinc extends javax.swing.JFrame {
         this.getContentPane().setVisible(true);
         SeleccionModulos t= new SeleccionModulos(this);
         t.setVisible(true);
-        t.setBounds(0,0,750,500);
+        t.setBounds(0,0,1920,1080);
         this.getContentPane().add(t);
     }
     public void showCitasForm(){
@@ -118,7 +152,25 @@ public class VentanaPrinc extends javax.swing.JFrame {
         this.getContentPane().setVisible(true);
         CitasForm t= new CitasForm(this);
         t.setVisible(true);
-        t.setBounds(0,0,750,500);
+        t.setBounds(0,0,1920,1080);
+        this.getContentPane().add(t);
+    }
+    public void showCitasForm(String nombre,String dni){
+        this.getContentPane().removeAll();
+        this.getContentPane().setVisible(false);
+        this.getContentPane().setVisible(true);
+        CitasForm t= new CitasForm(this,nombre,dni);
+        t.setVisible(true);
+        t.setBounds(0,0,1920,1080);
+        this.getContentPane().add(t);
+    }
+    public void showCitasCalendar(){
+        this.getContentPane().removeAll();
+        this.getContentPane().setVisible(false);
+        this.getContentPane().setVisible(true);
+        CitasCalendario t= new CitasCalendario(this);
+        t.setVisible(true);
+        t.setBounds(0,0,1920,1080);
         this.getContentPane().add(t);
     }
     public void showArticulosPrinc(){
@@ -127,7 +179,7 @@ public class VentanaPrinc extends javax.swing.JFrame {
         this.getContentPane().setVisible(true);
         ArticulosPrinc t= new ArticulosPrinc(this);
         t.setVisible(true);
-        t.setBounds(0,0,750,500);
+        t.setBounds(0,0,1920,1080);
         this.getContentPane().add(t);
     }
     public void showFacturacionForm(){
@@ -136,7 +188,16 @@ public class VentanaPrinc extends javax.swing.JFrame {
         this.getContentPane().setVisible(true);
         FacturacionForm t= new FacturacionForm(this);
         t.setVisible(true);
-        t.setBounds(0,0,750,500);
+        t.setBounds(0,0,1920,1080);
+        this.getContentPane().add(t);
+    }
+    public void showFacturacionForm(String nombre){
+        this.getContentPane().removeAll();
+        this.getContentPane().setVisible(false);
+        this.getContentPane().setVisible(true);
+        FacturacionForm t= new FacturacionForm(this,nombre);
+        t.setVisible(true);
+        t.setBounds(0,0,1920,1080);
         this.getContentPane().add(t);
     }
     public void showFacturacionConf(DefaultTableModel dtm){
@@ -145,7 +206,16 @@ public class VentanaPrinc extends javax.swing.JFrame {
         this.getContentPane().setVisible(true);
         Confirmacion t= new Confirmacion(this,dtm);
         t.setVisible(true);
-        t.setBounds(0,0,750,500);
+        t.setBounds(0,0,1920,1080);
+        this.getContentPane().add(t);
+    }
+    public void showFacturacionConf(DefaultTableModel dtm,String nombre){
+        this.getContentPane().removeAll();
+        this.getContentPane().setVisible(false);
+        this.getContentPane().setVisible(true);
+        Confirmacion t= new Confirmacion(this,dtm,nombre);
+        t.setVisible(true);
+        t.setBounds(0,0,1920,1080);
         this.getContentPane().add(t);
     }
     public void showFacturacionConf(){
@@ -154,8 +224,17 @@ public class VentanaPrinc extends javax.swing.JFrame {
         this.getContentPane().setVisible(true);
         Confirmacion t= new Confirmacion(this);
         t.setVisible(true);
-        t.setBounds(0,0,750,500);
+        t.setBounds(0,0,1920,1080);
         this.getContentPane().add(t);
+    }
+    public boolean getCitas(){
+        return citas;
+    }
+    public boolean getArticulos(){
+        return articulos;
+    }
+    public boolean getFacturacion(){
+        return facturacion;
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -166,6 +245,7 @@ public class VentanaPrinc extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jCalendar1 = new com.toedter.calendar.JCalendar();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -177,6 +257,7 @@ public class VentanaPrinc extends javax.swing.JFrame {
         jMenu6 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(1920, 1080));
 
         jMenu1.setText("Principal");
         jMenu1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -210,9 +291,19 @@ public class VentanaPrinc extends javax.swing.JFrame {
         });
 
         jMenu7.setText("Dar cita");
+        jMenu7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu7MouseClicked(evt);
+            }
+        });
         jMenu4.add(jMenu7);
 
         jMenu8.setText("Calendario");
+        jMenu8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu8MouseClicked(evt);
+            }
+        });
         jMenu4.add(jMenu8);
 
         jMenuBar1.add(jMenu4);
@@ -262,7 +353,7 @@ public class VentanaPrinc extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenu3MouseClicked
 
     private void jMenu4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu4MouseClicked
-        showCitasForm();
+        
     }//GEN-LAST:event_jMenu4MouseClicked
 
     private void jMenu5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu5MouseClicked
@@ -272,6 +363,14 @@ public class VentanaPrinc extends javax.swing.JFrame {
     private void jMenu6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu6MouseClicked
         showArticulosPrinc();
     }//GEN-LAST:event_jMenu6MouseClicked
+
+    private void jMenu7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu7MouseClicked
+        showCitasForm();
+    }//GEN-LAST:event_jMenu7MouseClicked
+
+    private void jMenu8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu8MouseClicked
+        showCitasCalendar();
+    }//GEN-LAST:event_jMenu8MouseClicked
 
     /**
      * @param args the command line arguments
@@ -309,6 +408,7 @@ public class VentanaPrinc extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.toedter.calendar.JCalendar jCalendar1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;

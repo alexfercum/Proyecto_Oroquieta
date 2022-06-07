@@ -4,6 +4,17 @@
  */
 package Citas;
 
+import Database.Database;
+import Principal.VentanaPrinc;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
 /**
  *
  * @author Alex
@@ -13,10 +24,40 @@ public class CitasCalendario extends javax.swing.JPanel {
     /**
      * Creates new form CitasCalendario
      */
+    VentanaPrinc padre;
+    private List<QueryDocumentSnapshot> documents;
     public CitasCalendario() {
         initComponents();
     }
 
+    public CitasCalendario(VentanaPrinc princ) {
+        initComponents();
+        padre=princ;
+        
+        
+    }
+    
+    private void mostrarCitasDiarias(){
+         
+        SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy");
+        String filtro=sd.format(jCalendar1.getCalendar().getTime());
+        String lineaFinal="";
+        
+        ArrayList<String> citas = new ArrayList<String>();
+        ArrayList<String> horas = new ArrayList<String>();
+        documents = Database.accederDB("Citas");
+        
+        for (int i = 0; i < documents.size(); i++) {
+            if (documents.get(i).getData().get("Fecha").equals(filtro)) {
+                String cita=(documents.get(i).getData().get("Hora")+": Mascota: "+documents.get(i).getData().get("Mascota")+" Propietario: "+documents.get(i).getData().get("Cliente")+"  ||");
+                lineaFinal=(lineaFinal+" "+cita);
+                
+            }
+        }
+        jTextField1.setText(lineaFinal);
+          
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -27,19 +68,45 @@ public class CitasCalendario extends javax.swing.JPanel {
     private void initComponents() {
 
         jCalendar1 = new com.toedter.calendar.JCalendar();
-        jCalendar2 = new com.toedter.calendar.JCalendar();
-        jCalendar3 = new com.toedter.calendar.JCalendar();
-        jCalendar4 = new com.toedter.calendar.JCalendar();
+        jTextField1 = new javax.swing.JTextField();
 
+        setBackground(new java.awt.Color(204, 255, 204));
+        setPreferredSize(new java.awt.Dimension(900, 500));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        add(jCalendar4, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 20, 300, 260));
+
+        jCalendar1.setBackground(new java.awt.Color(204, 255, 204));
+        jCalendar1.setForeground(new java.awt.Color(0, 0, 0));
+        jCalendar1.setDecorationBackgroundColor(new java.awt.Color(153, 255, 153));
+        jCalendar1.setSundayForeground(new java.awt.Color(0, 0, 0));
+        jCalendar1.setWeekdayForeground(new java.awt.Color(0, 0, 0));
+        jCalendar1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jCalendar1PropertyChange(evt);
+            }
+        });
+        add(jCalendar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 10, 752, 480));
+
+        jTextField1.setText("jTextField1");
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
+        add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 490, 750, 80));
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jCalendar1PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jCalendar1PropertyChange
+        mostrarCitasDiarias();
+        
+    }//GEN-LAST:event_jCalendar1PropertyChange
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.toedter.calendar.JCalendar jCalendar1;
-    private com.toedter.calendar.JCalendar jCalendar2;
-    private com.toedter.calendar.JCalendar jCalendar3;
-    private com.toedter.calendar.JCalendar jCalendar4;
+    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }

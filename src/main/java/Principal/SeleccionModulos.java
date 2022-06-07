@@ -4,6 +4,19 @@
  */
 package Principal;
 
+import Database.Database;
+import Mascotas.MascotaFicha;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 
 /**
@@ -16,14 +29,39 @@ public class SeleccionModulos extends javax.swing.JPanel {
      * Creates new form SeleccionModulos
      */
     VentanaPrinc padre;
+    private List<QueryDocumentSnapshot> documents;
     public SeleccionModulos() {
         initComponents();
+        init();
     }
     public SeleccionModulos(VentanaPrinc frame) {
         initComponents();
+        init();
         padre=frame;
     }
-    
+    public void init(){
+        boolean articulos;
+        boolean citas;
+        boolean facturacion;
+        documents = Database.accederDB("Modulos");        
+        articulos=(boolean) documents.get(0).getData().get("Articulos");
+        citas=(boolean) documents.get(0).getData().get("Citas");
+        facturacion=(boolean) documents.get(0).getData().get("Facturacion");
+        jCheckBox1.setSelected(citas);
+        jCheckBox2.setSelected(facturacion);
+        jCheckBox3.setSelected(articulos);
+        
+    }
+    public void deshabilitarFunciones(){
+         
+                
+        boolean articulos=jCheckBox3.isSelected();
+        boolean citas=jCheckBox1.isSelected();
+        boolean facturacion=jCheckBox2.isSelected();           
+        padre.ocultaMenus(citas,facturacion,articulos);
+        
+        
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -33,6 +71,7 @@ public class SeleccionModulos extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -41,36 +80,98 @@ public class SeleccionModulos extends javax.swing.JPanel {
         jCheckBox3 = new javax.swing.JCheckBox();
         jButton1 = new javax.swing.JButton();
 
-        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        setBackground(new java.awt.Color(204, 255, 204));
+        setPreferredSize(new java.awt.Dimension(1800, 900));
+        setLayout(new java.awt.GridBagLayout());
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 80)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 153, 0));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("TITULO");
-        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 30, 80, 50));
+        jLabel1.setText("OROQUIETA");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.ipadx = 112;
+        gridBagConstraints.ipady = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 190, 0, 0);
+        add(jLabel1, gridBagConstraints);
 
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 153, 0));
         jLabel2.setText("Seleccione los modulos que desea instalar");
-        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 80, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 9;
+        gridBagConstraints.ipady = -8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(140, 140, 0, 111);
+        add(jLabel2, gridBagConstraints);
 
+        jCheckBox1.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        jCheckBox1.setForeground(new java.awt.Color(0, 153, 0));
         jCheckBox1.setText("Citas");
         jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBox1ActionPerformed(evt);
             }
         });
-        add(jCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 110, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.ipady = -12;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(40, 130, 0, 0);
+        add(jCheckBox1, gridBagConstraints);
 
+        jCheckBox2.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        jCheckBox2.setForeground(new java.awt.Color(0, 153, 0));
         jCheckBox2.setText("Facturacion");
-        add(jCheckBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 110, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.ipady = -12;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(40, 131, 0, 0);
+        add(jCheckBox2, gridBagConstraints);
 
+        jCheckBox3.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        jCheckBox3.setForeground(new java.awt.Color(0, 153, 0));
         jCheckBox3.setText("Articulos");
-        add(jCheckBox3, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 110, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.ipady = -12;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(40, 64, 0, 0);
+        add(jCheckBox3, gridBagConstraints);
 
+        jButton1.setBackground(new java.awt.Color(116, 116, 235));
+        jButton1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(0, 0, 0));
         jButton1.setText("Aceptar");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton1MouseClicked(evt);
+            }
+        });
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
-        add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 220, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.ipadx = 49;
+        gridBagConstraints.ipady = 22;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(40, 151, 60, 0);
+        add(jButton1, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
@@ -80,6 +181,30 @@ public class SeleccionModulos extends javax.swing.JPanel {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        Boolean citas=  jCheckBox1.isSelected();
+        Boolean facturacion=  jCheckBox2.isSelected();
+        Boolean articulos=  jCheckBox3.isSelected();
+        Firestore db = Database.getDatabase();
+        DocumentReference docRef = db.collection("Modulos").document("1");
+        try {                    
+            DocumentSnapshot documento = docRef.get().get();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(SeleccionModulos.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ExecutionException ex) {
+            Logger.getLogger(SeleccionModulos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        docRef.update("Citas", citas);
+        docRef.update("Facturacion", facturacion);
+        docRef.update("Articulos", articulos);
+            
+        
+        padre.showVentanaInicio();
+        deshabilitarFunciones();
+            
+        
+    }//GEN-LAST:event_jButton1MouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
